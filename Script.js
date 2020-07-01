@@ -25,6 +25,7 @@ var score=5;
 var firstDouble=false;
 var secondDouble=false;
 var button = document.getElementsByTagName('button')[0];
+var restart = document.getElementById("restart");
 var table = document.getElementById("table");
 var table2 = document.getElementById("table2");
 var start;
@@ -65,6 +66,7 @@ function topscore(){
     }
 console.log("hello")
 }
+
 button.onclick=function (){
     var lnick = window.prompt("Podaj nick");
     var lspeed = 5
@@ -75,17 +77,29 @@ button.onclick=function (){
     addSquareFrequency=laddSquareFrequency;
     countDownFrequency=lcountDownFrequency;
     start=(Math.floor(performance.now()/1000));
+    button.style.display="none"
+    restart.style.display="block"
+
     globalID = requestAnimationFrame(draw);
+}
+restart.onclick=function (){
+    document.location.reload();
+    window.cancelAnimationFrame(globalID);
 }
 
 function checkCollision(){
     for (var w=0; w<tabx.length; w++){
-        if(x>tabx[w]-10 && x<tabx[w]+30 && y>taby[w]-10 && y<taby[w]+30 &&tabdraw[w]==true){
+        if(x>tabx[w]-25 && x<tabx[w]+25 && y>taby[w]-25 && y<taby[w]+25 &&tabdraw[w]==true){
             score+=tabtime[w];
             points();
-            tabdraw[w]=false;
+            tabx.splice(w, 1)
+            taby.splice(w, 1)
+            tabdraw.splice(w, 1);
+            tabtime.splice(w, 1);
+            tabcolor.splice(w, 1);
         }
     }
+    console.log(tabx.length)
 }
 function countDown(){
     for(var q=0; q<tabtime.length; q++){
@@ -98,7 +112,7 @@ function countDown(){
 function changeColor(){
     for (var q=0; q<tabx.length; q++){
     if(tabtime[q]<0){
-        tabcolor[q]='red';
+        tabcolor[q]='black';
 }
 }
 }
@@ -114,21 +128,23 @@ function addSquare(){
 function drawSquares(){
 for(var k=0; k<tabx.length; k++){
     if(tabdraw[k]){
+
 ctx.beginPath();
-ctx.rect(tabx[k], taby[k], 20, 20);
-ctx.fillStyle = tabcolor[k];
-ctx.fill();
+        ctx.arc(tabx[k], taby[k], 10, 0, Math.PI*2);
+        ctx.fillStyle = tabcolor[k];
+        ctx.fill();
 ctx.closePath();
-ctx.font = "15px Arial";
-ctx.fillStyle ="black";
-ctx.fillText(tabtime[k], tabx[k], taby[k]+15);
+ctx.font = "12px Arial";
+ctx.fillStyle ="white";
+ctx.textAlign="center";
+ctx.fillText(tabtime[k], tabx[k], taby[k]+4);
 }
 }
 }
 
 function drawBall(){
     ctx.beginPath();
-    ctx.arc(x, y, 10, 0, Math.PI*2);
+    ctx.arc(x, y, 15, 0, Math.PI*2);
     ctx.fillStyle = "blue";
     ctx.fill();
     ctx.closePath();
@@ -222,33 +238,40 @@ function draw() {
 function keyDownHandler(e) {
     if(e.key == "Right" || e.key == "ArrowRight") {
         rightPressed = true;
+        e.view.event.preventDefault();
     }
     else if(e.key == "Left" || e.key == "ArrowLeft") {
         leftPressed = true;
+        e.view.event.preventDefault();
     }
 
     if(e.key == "Up" || e.key == "ArrowUp") {
         upPressed = true;
+        e.view.event.preventDefault();
     }
     else if(e.key == "Down" || e.key == "ArrowDown") {
         downPressed = true;
+        e.view.event.preventDefault();
     }
 }
 
 function keyUpHandler(e) {
-
     if(e.key == "Right" || e.key == "ArrowRight") {
         rightPressed = false;
+        e.view.event.preventDefault();
     }
     else if(e.key == "Left" || e.key == "ArrowLeft") {
         leftPressed = false;
+        e.view.event.preventDefault();
     }
 
     if(e.key == "Up" || e.key == "ArrowUp") {
         upPressed = false;
+        e.view.event.preventDefault();
     }
     else if(e.key == "Down" || e.key == "ArrowDown") {
         downPressed = false;
+        e.view.event.preventDefault();
     }
 }
 document.addEventListener("keydown", keyDownHandler, false);
