@@ -28,47 +28,48 @@ var button = document.getElementsByTagName('button')[0];
 var table = document.getElementById("table");
 var table2 = document.getElementById("table2");
 var start;
+var time=180;
 function loadLocalStorage(){
-    table2.rows[1].cells[1].textContent=localStorage.getItem('PierwszeMiejsce');
-    table2.rows[2].cells[1].textContent=localStorage.getItem('DrugieMiejsce');
-    table2.rows[3].cells[1].textContent=localStorage.getItem('TrzecieMiejsce');
-    table2.rows[1].cells[0].textContent=localStorage.getItem('PierwszeMiejsceNick');
-    table2.rows[2].cells[0].textContent=localStorage.getItem('DrugieMiejsceNick');
-    table2.rows[3].cells[0].textContent=localStorage.getItem('TrzecieMiejsceNick');
+    table2.rows[1].cells[2].textContent=localStorage.getItem('PierwszeMiejsce');
+    table2.rows[2].cells[2].textContent=localStorage.getItem('DrugieMiejsce');
+    table2.rows[3].cells[2].textContent=localStorage.getItem('TrzecieMiejsce');
+    table2.rows[1].cells[1].textContent=localStorage.getItem('PierwszeMiejsceNick');
+    table2.rows[2].cells[1].textContent=localStorage.getItem('DrugieMiejsceNick');
+    table2.rows[3].cells[1].textContent=localStorage.getItem('TrzecieMiejsceNick');
 }
 loadLocalStorage();
 function points(){
     table.rows[1].cells[1].textContent=score
 }
 function seconds(){
-    table.rows[1].cells[0].textContent=180+start-(Math.floor(performance.now()/1000))
+    table.rows[1].cells[0].textContent=time+start-(Math.floor(performance.now()/1000))
 }
 function topscore(){
-    if(score>parseInt(table2.rows[1].cells[1].textContent)){
+    if(score>parseInt(table2.rows[1].cells[2].textContent)){
         localStorage.setItem('PierwszeMiejsce', score);
         localStorage.setItem('PierwszeMiejsceNick', nick);
-        localStorage.setItem('DrugieMiejsce', table2.rows[1].cells[1].textContent);
-        localStorage.setItem('DrugieMiejsceNick', table2.rows[1].cells[0].textContent);
-        localStorage.setItem('TrzecieMiejsce', table2.rows[2].cells[1].textContent);
-        localStorage.setItem('TrzecieMiejsceNick', table2.rows[2].cells[0].textContent);
+        localStorage.setItem('DrugieMiejsce', table2.rows[1].cells[2].textContent);
+        localStorage.setItem('DrugieMiejsceNick', table2.rows[1].cells[1].textContent);
+        localStorage.setItem('TrzecieMiejsce', table2.rows[2].cells[2].textContent);
+        localStorage.setItem('TrzecieMiejsceNick', table2.rows[2].cells[1].textContent);
     }
-    else if(score>parseInt(table2.rows[2].cells[1].textContent)){
+    else if(score>parseInt(table2.rows[2].cells[2].textContent)){
         localStorage.setItem('DrugieMiejsce', score);
         localStorage.setItem('DrugieMiejsceNick', nick);
-        localStorage.setItem('TrzecieMiejsce', table2.rows[2].cells[1].textContent);
-        localStorage.setItem('TrzecieMiejsceNick', table2.rows[2].cells[0].textContent);
+        localStorage.setItem('TrzecieMiejsce', table2.rows[2].cells[2].textContent);
+        localStorage.setItem('TrzecieMiejsceNick', table2.rows[2].cells[1].textContent);
     }
-    else if(score>parseInt(table2.rows[3].cells[1].textContent)){
+    else if(score>parseInt(table2.rows[3].cells[2].textContent)){
         localStorage.setItem('TrzecieMiejsce', score);
         localStorage.setItem('TrzecieMiejsceNick', nick);
     }
-
+console.log("hello")
 }
 button.onclick=function (){
     var lnick = window.prompt("Podaj nick");
-    var lspeed = window.prompt("Podaj początkową prędkość kulki");
-    var laddSquareFrequency = window.prompt("Podaj częstotliwość dodawania kwadratu");
-    var lcountDownFrequency = window.prompt("Podaj częstotliwość dekrementacji licznika");
+    var lspeed = 5
+    var laddSquareFrequency = 30
+    var lcountDownFrequency = 15
     nick=lnick;
     speed=parseInt(lspeed);
     addSquareFrequency=laddSquareFrequency;
@@ -140,19 +141,19 @@ function draw() {
     checkCollision();
     changeColor();
     seconds();
-    if(Math.floor(performance.now()/1000)-start>60 && firstDouble==false){
+    if(Math.floor(performance.now()/1000)-start>time/3 && firstDouble==false){
             countDownFrequency=Math.floor(countDownFrequency/2);
             addSquareFrequency=Math.floor(addSquareFrequency/2);
             speed=speed*2;
             firstDouble=true;
     }
-    if(Math.floor(performance.now()/1000)-start>120 &&  secondDouble==false){
+    if(Math.floor(performance.now()/1000)-start>time/3*2 &&  secondDouble==false){
         countDownFrequency=Math.floor(countDownFrequency/2);
         addSquareFrequency=Math.floor(addSquareFrequency/2);
         speed=speed*2;
         secondDouble=true;
     }
-    if(Math.floor(performance.now()/1000)-start>180){
+    if(Math.floor(performance.now()/1000)-start>time){
         topscore();
         alert("Koniec gry!");
         document.location.reload();
