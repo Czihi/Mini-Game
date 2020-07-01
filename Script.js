@@ -64,7 +64,7 @@ function topscore(){
         localStorage.setItem('TrzecieMiejsce', score);
         localStorage.setItem('TrzecieMiejsceNick', nick);
     }
-console.log("hello")
+
 }
 
 button.onclick=function (){
@@ -99,7 +99,6 @@ function checkCollision(){
             tabcolor.splice(w, 1);
         }
     }
-    console.log(tabx.length)
 }
 function countDown(){
     for(var q=0; q<tabtime.length; q++){
@@ -187,47 +186,49 @@ function draw() {
     }else{
         cDF++;
     }
-    if(x + speed > canvas.width-ballRadius) {
-       x=10;
+    console.log(x, speed, leftPressed)
+    if(x >= 480  && rightPressed ){
+        x=0;
     }
 
-    if(x + speed < ballRadius){
-        x=470;
+    if(x <= 0 && leftPressed) {
+       x=480;
     }
 
-    if(y + speed > canvas.height-ballRadius){
-       y=10;
+
+    if(y<=0 && upPressed){
+       y=320;
     }    
 
-    if (y + speed < ballRadius) {
-        y=310;
+    if (y>=320 && downPressed) {
+        y=0;
     }
-    if(rightPressed && x < canvas.width && downPressed && y < canvas.height) {
+    if(rightPressed && downPressed) {
         x += speed;
         y+=speed;
     }
-    else if(leftPressed && x > 0 && downPressed && y < canvas.height) {
+    else if(leftPressed && downPressed) {
         x -= speed;
         y+=speed
     }
-    else if(upPressed && y > 0 && leftPressed && x >0){
+    else if(upPressed && leftPressed){
         y-= speed;
         x-=speed;
     }
-    else if(upPressed && y < canvas.height && rightPressed && x < canvas.width){
+    else if(upPressed && rightPressed){
         y-=speed;
         x+=speed;
     }else
-    if(rightPressed && x < canvas.width) {
+    if(rightPressed) {
         x += speed;
     }
-    else if(leftPressed && x > 0) {
+    else if(leftPressed) {
         x -= speed;
     }
-    else if(upPressed && y > 0){
+    else if(upPressed){
         y-= speed;
     }
-    else if(downPressed && y < canvas.height){
+    else if(downPressed){
         y+=speed;
     }
     globalID = requestAnimationFrame(draw);
