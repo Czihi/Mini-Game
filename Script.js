@@ -29,7 +29,8 @@ var restart = document.getElementById("restart");
 var table = document.getElementById("table");
 var table2 = document.getElementById("table2");
 var start;
-var time=180;
+var time=30;
+
 function loadLocalStorage(){
     table2.rows[1].cells[2].textContent=localStorage.getItem('PierwszeMiejsce');
     table2.rows[2].cells[2].textContent=localStorage.getItem('DrugieMiejsce');
@@ -79,7 +80,9 @@ button.onclick=function (){
     start=(Math.floor(performance.now()/1000));
     button.style.display="none"
     restart.style.display="block"
-
+    document.getElementById("phase").innerText="Faza pierwsza"
+    $("#phase").fadeIn(4000);
+    $("#phase").fadeOut(6600);
     globalID = requestAnimationFrame(draw);
 }
 restart.onclick=function (){
@@ -161,12 +164,18 @@ function draw() {
             addSquareFrequency=Math.floor(addSquareFrequency/2);
             speed=speed*2;
             firstDouble=true;
+        $("#phase").fadeIn(4000);
+        $("#phase").fadeOut(6100);
+        document.getElementById("phase").innerText="Faza druga: Prędkość piłki, częstotliwość pojawiania się punktów, zmniejszanie liczby punktów x2"
     }
     if(Math.floor(performance.now()/1000)-start>time/3*2 &&  secondDouble==false){
         countDownFrequency=Math.floor(countDownFrequency/2);
         addSquareFrequency=Math.floor(addSquareFrequency/2);
         speed=speed*2;
         secondDouble=true;
+        $("#phase").fadeIn(4000);
+        $("#phase").fadeOut(6100);
+        document.getElementById("phase").innerText="Faza trzecia: Prędkość piłki, częstotliwość pojawiania się punktów, zmniejszanie liczby punktów x4"
     }
     if(Math.floor(performance.now()/1000)-start>time){
         topscore();
