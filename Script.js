@@ -1,6 +1,5 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
-var ballRadius = 10;
 var x = 240;
 var y = 160;
 var rightPressed = false;
@@ -18,9 +17,9 @@ var taby=[100, 200];
 var tabtime=[20, 20];
 var tabcolor=['green', 'green'];
 var tabdraw=[true, true];
-var addSquareFrequency
-var countDownFrequency
-var speed
+var addSquareFrequency=0;
+var countDownFrequency=0;
+var speed=0;
 var score=5;
 var firstDouble=false;
 var secondDouble=false;
@@ -30,7 +29,7 @@ var table = document.getElementById("table");
 var table2 = document.getElementById("table2");
 var start;
 var time=30;
-
+var done=false;
 function loadLocalStorage(){
     table2.rows[1].cells[2].textContent=localStorage.getItem('PierwszeMiejsce');
     table2.rows[2].cells[2].textContent=localStorage.getItem('DrugieMiejsce');
@@ -159,30 +158,6 @@ function draw() {
     checkCollision();
     changeColor();
     seconds();
-    if(Math.floor(performance.now()/1000)-start>time/3 && firstDouble==false){
-            countDownFrequency=Math.floor(countDownFrequency/2);
-            addSquareFrequency=Math.floor(addSquareFrequency/2);
-            speed=speed*2;
-            firstDouble=true;
-        $("#phase").fadeIn(4000);
-        $("#phase").fadeOut(6100);
-        document.getElementById("phase").innerText="Faza druga: Prędkość piłki, częstotliwość pojawiania się punktów, zmniejszanie liczby punktów x2"
-    }
-    if(Math.floor(performance.now()/1000)-start>time/3*2 &&  secondDouble==false){
-        countDownFrequency=Math.floor(countDownFrequency/2);
-        addSquareFrequency=Math.floor(addSquareFrequency/2);
-        speed=speed*2;
-        secondDouble=true;
-        $("#phase").fadeIn(4000);
-        $("#phase").fadeOut(6100);
-        document.getElementById("phase").innerText="Faza trzecia: Prędkość piłki, częstotliwość pojawiania się punktów, zmniejszanie liczby punktów x4"
-    }
-    if(Math.floor(performance.now()/1000)-start>time){
-        topscore();
-        alert("Koniec gry!");
-        document.location.reload();
-        window.cancelAnimationFrame(globalID);
-    }
     if(aSF>=addSquareFrequency){
         addSquare();
         aSF=0;
@@ -195,7 +170,6 @@ function draw() {
     }else{
         cDF++;
     }
-    console.log(x, speed, leftPressed)
     if(x >= 480  && rightPressed ){
         x=0;
     }
@@ -240,7 +214,36 @@ function draw() {
     else if(downPressed){
         y+=speed;
     }
-    globalID = requestAnimationFrame(draw);
+    if((performance.now()/1000)-start>time/3 && firstDouble==false){
+        countDownFrequency=Math.floor(countDownFrequency/2);
+        addSquareFrequency=Math.floor(addSquareFrequency/2);
+        speed=speed*2;
+        firstDouble=true;
+        $("#phase").fadeIn(4000);
+        $("#phase").fadeOut(6100);
+        document.getElementById("phase").innerText="Faza druga: Prędkość piłki, częstotliwość pojawiania się punktów, zmniejszanie liczby punktów x2"
+    }
+    if((performance.now()/1000)-start>time/3*2 &&  secondDouble==false){
+        countDownFrequency=Math.floor(countDownFrequency/2);
+        addSquareFrequency=Math.floor(addSquareFrequency/2);
+        speed=speed*2;
+        secondDouble=true;
+        $("#phase").fadeIn(4000);
+        $("#phase").fadeOut(6100);
+        document.getElementById("phase").innerText="Faza trzecia: Prędkość piłki, częstotliwość pojawiania się punktów, zmniejszanie liczby punktów x4"
+    }
+    if((performance.now()/1000)-start>time){
+        topscore();
+        $("#phase").fadeIn(4000);
+        document.getElementById("phase").innerText="Koniec gry!"
+        done=true;
+    }
+    if(!done) {
+        globalID = requestAnimationFrame(draw);
+    }else{
+        cancelAnimationFrame(draw);
+
+    }
 }
 
 
@@ -286,3 +289,4 @@ function keyUpHandler(e) {
 }
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+
